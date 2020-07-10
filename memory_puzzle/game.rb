@@ -1,14 +1,17 @@
 require_relative 'card'
 require_relative 'board'
+require_relative 'human_player'
+require_relative 'computer_player'
 
 class Game
-
-    attr_accessor :previous_guess
-    def initialize(n)
+    attr_reader :players, :board
+    attr_accessor :previous_guess, :current_player, :previous_player
+    def initialize(n, player_names)
         @board = Board.new(n)
-        # @board.populate
         @previous_guess = nil
-
+        @players = player_names.map{|name| name[0] =='m' ? ComputerPlayer.new(name) : HumanPlayer.new(name)}
+        @current_player = players.first
+        @previous_player = nil
     end
 
     def make_guess(guessed_pos)
@@ -26,19 +29,32 @@ class Game
         end
     end
 
+    def switch_turn
+        @players.rotate!
+        @previous_player = @current_player
+        @current_player = @players.first
+    end
+
     def play
         begin
-            # system("clear")
-            sleep(0.1)
+            p "Player #{@current_player.name}'s turn"
+            # 1st guess
+            pos = @current_player.get_position(@board.legal_positions)
+            p "Player #{@current_player.name} chose position #{pos}" 
+            self.make_guess(pos)
             @board.render
-            p 'Enter 2 numbers in this format: 2 4'
-            guess = gets.chomp.split.map(&:to_i)
-            self.make_guess(guess)
+            # 2nd guess
+            pos = @current_player.get_position(@board.legal_positions)
+            p "Player #{@current_player.name} chose position #{pos}" 
+            self.make_guess(pos)
+            @board.render
+            #next
+            self.switch_turn
         end until @board.won?
-        p ' You won'
+        p "#{@previous_player.name} won"
     end
 
 end
 
-g = Game.new(2)
+g = Game.new(2, ['m','h'])
 g.play

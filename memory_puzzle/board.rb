@@ -44,10 +44,23 @@ class Board
         self[guessed_pos].reveal if !self[guessed_pos].face_up
     end
 
+    def legal_positions
+        res = []
+        (0...@n).each do |i|
+            (0...@n).each do |j|
+                pos = [i, j]
+                res << pos if self[pos].face_up == false
+            end
+        end
+        res
+    end
+
 end
 
 
-# b = Board.new(4)
+# b = Board.new(2)
 # b.populate
-# b.reveal([1,2])
-# b.render
+# b.reveal([1,1])
+# p b.legal_positions
+
+# # b.render
