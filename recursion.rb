@@ -1,3 +1,5 @@
+require 'byebug'
+
 def sum_to(n)
     return nil if n < 0
     return 1 if n == 1
@@ -407,6 +409,30 @@ def make_better_change(amount, changes)
     end
     best_change   
 end  
+
+$big_arr = [1]*30
+
+def make_better_change(amount, changes)
+    # debugger if amount == 14
+    return [] if amount == 0
+    return $big_arr if changes.empty?
+    coin = changes[0]
+    changes = changes[1..-1]
+    best_changes = make_better_change(amount, changes)
+    current_usages = []
+    while amount >= coin
+        amount -= coin
+        current_usages << coin
+        current_changes = make_better_change(amount, changes)
+        if current_usages.length > best_changes.length
+            break
+        end
+        if current_changes.length + current_usages.length < best_changes.length
+            best_changes = current_usages + current_changes 
+        end
+    end
+    best_changes
+end
 
 p make_better_change(24, [10,7,1]) # => [10,7,7]
 

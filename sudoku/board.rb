@@ -4,9 +4,9 @@ require 'pp'
 class Board
 
     attr_accessor :grid
-    def self.from_file
+    def self.from_file(filename)
         tmp = Array.new(9) {Array.new(9, Tile.new(0))}
-        File.open('./puzzles/sudoku1_almost.txt', 'r').each_line.with_index do |line, i|
+        File.open(fromfile, 'r').each_line.with_index do |line, i|
             line.chomp.split('').each_index do |j|
                 tmp[i][j] = Tile.new(line[j])
             end
@@ -14,8 +14,8 @@ class Board
         tmp
     end
     
-    def initialize
-        @grid = Board.from_file
+    def initialize(filename)
+        @grid = Board.from_file(filename)
     end
 
     def [](pos)
@@ -49,8 +49,8 @@ class Board
 
     def each_sub_solved?(start_row, end_row, start_col, end_col)
         tiles = []
-        (start_row..end_row).each do |i|
-            (start_col..end_col).each do |j|
+        (start_row...end_row).each do |i|
+            (start_col...end_col).each do |j|
                 tiles << @grid[i][j].value
             end
         end
@@ -59,15 +59,15 @@ class Board
 
     def subs_solved?
         res = []
-        res << each_sub_solved?(0, 2, 0, 2)
-        res << each_sub_solved?(0, 2, 3, 5)
-        res << each_sub_solved?(0, 2, 6, 8)
-        res << each_sub_solved?(3, 5, 0, 2)
-        res << each_sub_solved?(3, 5, 3, 5)
-        res << each_sub_solved?(3, 5, 6, 8)
-        res << each_sub_solved?(6, 8, 0, 2)
-        res << each_sub_solved?(6, 8, 3, 5)
-        res << each_sub_solved?(6, 8, 6, 8)
+        res << each_sub_solved?(0, 3, 0, 3)
+        res << each_sub_solved?(0, 3, 3, 6)
+        res << each_sub_solved?(0, 3, 6, 9)
+        res << each_sub_solved?(3, 6, 0, 3)
+        res << each_sub_solved?(3, 6, 3, 6)
+        res << each_sub_solved?(3, 6, 6, 9)
+        res << each_sub_solved?(6, 9, 0, 3)
+        res << each_sub_solved?(6, 9, 3, 6)
+        res << each_sub_solved?(6, 9, 6, 9)
 
         res.uniq.length == 1 && res.uniq[0] == true
 

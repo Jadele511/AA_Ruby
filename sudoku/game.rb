@@ -4,8 +4,8 @@ require_relative 'board'
 class Game
 
     attr_accessor :board, :player_name
-    def initialize
-        @board = Board.new
+    def initialize(filename)
+        @board = Board.new(filename)
     end
 
     def get_position(legal_positions)
@@ -62,5 +62,5 @@ class Game
     end
 end
 
-g = Game.new
-p g.play
+g = Game.new('./puzzles/sudoku1.txt')
+g.play
