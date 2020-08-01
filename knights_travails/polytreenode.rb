@@ -1,5 +1,8 @@
 class PolyTreeNode
 
+    attr_reader :pos
+    attr_accessor :children, :parent
+
     def initialize(pos, parent = nil)
         @pos = pos
         @children = []
@@ -9,7 +12,7 @@ class PolyTreeNode
 
     def dfs(end_pos)
         return self if self.pos == end_pos
-        self.each do |node|
+        self.children.each do |node|
             res = node.dfs(end_pos)
             return res if res
         end

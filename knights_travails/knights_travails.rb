@@ -8,7 +8,7 @@ class KnightPathFinder
     def self.valid_moves(pos)
         row, col = pos
         dx = [-2, -2, -1, 1, 2, 2, -1, 1]
-        dy = [-1, 1, 2, 2, 1, -1, -2. -2]
+        dy = [-1, 1, 2, 2, 1, -1, -2, -2]
         res = []
         (0...dx.length).each do |i|
             new_row = row + dx[i]
@@ -22,11 +22,11 @@ class KnightPathFinder
         @start_pos = start_pos
         @root_node = PolyTreeNode.new(start_pos)
         @considered_positions = [start_pos]
-        self.root_node.build_move_tree   
+        self.build_move_tree   
     end
 
     def new_move_positions(current_pos)
-        remaning_positions = KnightPathFinder.valid_moves(curent_pos).reject {|pos| @considered_positions.include?(pos)}
+        remaning_positions = KnightPathFinder.valid_moves(current_pos).reject {|pos| @considered_positions.include?(pos)}
         @considered_positions += remaning_positions
         remaning_positions
     end
@@ -55,3 +55,9 @@ class KnightPathFinder
     end
 
 end 
+
+# b = KnightPathFinder.new([0,0])
+# p b.trace_path_back(b.find_path([7,7]))
+
+
+
